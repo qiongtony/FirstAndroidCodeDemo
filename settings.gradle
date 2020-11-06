@@ -1,0 +1,3 @@
+include ':chapter2KotlinBasis'
+include ':app'
+rootProject.name = "FirstAndroidCodeDemo"
