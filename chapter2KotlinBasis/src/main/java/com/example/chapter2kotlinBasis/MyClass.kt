@@ -15,6 +15,34 @@ fun main(args: Array<String>) {
     kotlinCallJavaFunctionApi()
 
     withRunAndApply()
+
+    example { content, count ->
+        run {
+            println("字符串是$content 数量是$count")
+        }
+    }
+    val num1 = 100
+    val num2 = 80
+    // 这里有点像Callback？ ::funName 表示调用函数的引用，即将函数作为参数传入
+    val add = num1AndNum2(num1, num2, ::plus)
+    val minus = num1AndNum2(num1, num2, ::minus)
+
+    // Lambda简化版本
+    val addLambda = num1AndNum2(num1, num2){
+        n1, n2 ->
+        n1 + n2
+    }
+
+    val minusLambda = num1AndNum2(num1, num2){
+        n1, n2 ->
+        n1 - n2
+    }
+
+    println("addResult = $add minusResult = $minus addLambda = $addLambda minusLambda = $minusLambda")
+
+
+    higherTest()
+
 }
 
 /**
@@ -134,6 +162,40 @@ private fun withRunAndApply(){
     }
     println("applyResult = ${applyResult.toString()}")
     println("withRunAndApply=========================")
+}
+
+/**
+ * example是高阶函数，根据"->"可以划分成两边，左边定义传入的参数类型，右边定义返回值
+ */
+fun example(func : (String, Int) -> Unit){
+    func("hello", 123)
+}
+
+fun num1AndNum2(num1 : Int, num2 : Int, operation : (Int, Int) -> Int) : Int{
+    val result = operation(num1, num2)
+    return result
+}
+
+fun plus(num1: Int, num2: Int) : Int{
+    return num1 + num2
+}
+
+fun minus(num1 : Int, num2: Int) : Int{
+    return num1 - num2
+}
+
+fun higherTest(){
+    println("higherTest======================")
+    val list = listOf<String>("Apple", "Banana", "Orange", "Pear", "Grape", "Watermelon")
+    val result = StringBuilder().build {
+        append("Start eating fruits.\n")
+        for (fruit in list){
+            append(fruit).append("\n")
+        }
+        append("Ate all fruits.")
+    }
+    println(result.toString())
+    println("higherTest======================")
 }
 
 class MyClass {
